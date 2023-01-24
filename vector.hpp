@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/01/22 19:36:42 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/01/24 13:05:37 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,20 @@ namespace ft
 			typedef	typename allocator_type::const_reference	const_reference;
 			typedef	typename allocator_type::pointer			pointer;
 			typedef	typename allocator_type::const_pointer		const_pointer;
-		public://for constructors
+
+		
+		public:
+		//for constructors
 			explicit vector (const allocator_type& alloc = allocator_type()): size(0), capacity(0), arr(NULL), alloc(alloc)
 			{}
+	
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()): size(n), capacity(n), alloc(alloc)
 			{
 				arr = this->alloc.allocate(n);
 				for (size_type i = 0; i < n; i++)
 					arr[i] = val;
 			}
+		
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
 			{
@@ -50,21 +55,48 @@ namespace ft
 				for (InputIterator i = first; i != last; i++)
 					arr[j++] = *i;
 			}
-		public://overloaded operator
+
+			vector (const vector& x): size(x.size), capacity(x.capacity), alloc(x.alloc)
+			{
+				*this = vector(x.begin(), x.end());
+			}
+			
+			~vector()
+			{
+				if (arr)
+					alloc.deallocate(arr);
+			}
+		
+		public:
+		//overloaded operator
 			const_reference operator[] (size_type n) const
 			{
 				return (arr[n]);
 			}
+
 			reference operator[] (size_type n)
 			{
 				return (arr[n]);
 			}
 			
+			vector& operator= (const vector& x)
+			{
+				size = x.size;
+				capacity = x.capacity;
+				alloc = x.alloc;
+				arr = allloc.allocate(capacity);
+				for (size_type i = 0; i < capacity; i++)
+					arr[i] = x[i];
+				return (*this);
+			}
+			public:
+			//iterator
+				struct input_iterator_tag {};
 		private:
 			size_t		size;
 			size_t		capacity;
+			Alloc		alloc;
 			value_type	*arr;
-			Alloc		alloc; 
 		
 
 	};
