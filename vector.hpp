@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/01/24 13:05:37 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/01/25 22:59:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,36 @@
 
 namespace ft
 {
+	template <typename T, class Alloc = std::allocator<T> >
+	class RandomAccessIterator
+	{
+		private:
+			T	*pointer;
+			T	&reference;
+		public:
+			RandomAccessIterator(): pointer(NULL), reference(NULL)
+			{}
+			RandomAccessIterator(const RandomAccessIterator& copy)
+			{
+				pointer(copy.pointer);
+				reference(copy.reference);
+			}
+	};
+	
 	template < class T, class Alloc = std::allocator<T> > class vector
 	{
 		public:
-			typedef	T											value_type;
-			typedef	size_t										size_type;
-			typedef	std::allocator<T>							allocator_type;
-			typedef	typename allocator_type::reference			reference;
-			typedef	typename allocator_type::const_reference	const_reference;
-			typedef	typename allocator_type::pointer			pointer;
-			typedef	typename allocator_type::const_pointer		const_pointer;
+			typedef	T													value_type;
+			typedef	size_t												size_type;
+			typedef	std::allocator<T>									allocator_type;
+			typedef	typename allocator_type::reference					reference;
+			typedef	typename allocator_type::const_reference			const_reference;
+			typedef	typename allocator_type::pointer					pointer;
+			typedef	typename allocator_type::const_pointer				const_pointer;
+			typedef	typename ft::RandomAccessIterator<value_type>		iterator;
+			typedef	typename ft::RandomAccessIterator<const_pointer>	const_iterator;
+			typedef	typename std::reverse_iterator<iterator>			reverse_iterator;
+			typedef	typename std::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		
 		public:
