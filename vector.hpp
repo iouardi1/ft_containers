@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/01/25 22:59:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/01 18:04:03 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,24 @@
 #define VECTOR_HPP
 #include <memory>
 #include <vector>
+#include "random_access_iterator.hpp"
 
 namespace ft
-{
-	template <typename T, class Alloc = std::allocator<T> >
-	class RandomAccessIterator
-	{
-		private:
-			T	*pointer;
-			T	&reference;
-		public:
-			RandomAccessIterator(): pointer(NULL), reference(NULL)
-			{}
-			RandomAccessIterator(const RandomAccessIterator& copy)
-			{
-				pointer(copy.pointer);
-				reference(copy.reference);
-			}
-	};
-	
+{	
 	template < class T, class Alloc = std::allocator<T> > class vector
 	{
 		public:
-			typedef	T													value_type;
-			typedef	size_t												size_type;
-			typedef	std::allocator<T>									allocator_type;
-			typedef	typename allocator_type::reference					reference;
-			typedef	typename allocator_type::const_reference			const_reference;
-			typedef	typename allocator_type::pointer					pointer;
-			typedef	typename allocator_type::const_pointer				const_pointer;
-			typedef	typename ft::RandomAccessIterator<value_type>		iterator;
-			typedef	typename ft::RandomAccessIterator<const_pointer>	const_iterator;
-			typedef	typename std::reverse_iterator<iterator>			reverse_iterator;
-			typedef	typename std::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef	T															value_type;
+			typedef	size_t														size_type;
+			typedef	std::allocator<T>											allocator_type;
+			typedef	typename allocator_type::reference							reference;
+			typedef	typename allocator_type::const_reference					const_reference;
+			typedef	typename allocator_type::pointer							pointer;
+			typedef	typename allocator_type::const_pointer						const_pointer;
+			typedef	typename ft::random_access_iterator<pointer>			iterator;
+			typedef	typename ft::random_access_iterator<const_pointer>		const_iterator;
+			typedef	typename std::reverse_iterator<iterator>					reverse_iterator;
+			// typedef	typename std::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 		
 		public:
@@ -88,7 +73,7 @@ namespace ft
 			}
 		
 		public:
-		//overloaded operator
+		//overloaded operators
 			const_reference operator[] (size_type n) const
 			{
 				return (arr[n]);
@@ -104,24 +89,21 @@ namespace ft
 				size = x.size;
 				capacity = x.capacity;
 				alloc = x.alloc;
-				arr = allloc.allocate(capacity);
+				arr = alloc.allocate(capacity);
 				for (size_type i = 0; i < capacity; i++)
-					arr[i] = x[i];
+					arr[i] = x[i];//to be seen l a t e r
 				return (*this);
 			}
 			public:
 			//iterator
-				struct input_iterator_tag {};
 		private:
 			size_t		size;
 			size_t		capacity;
 			Alloc		alloc;
 			value_type	*arr;
-		
+
 
 	};
 }
-
-
 
 #endif
