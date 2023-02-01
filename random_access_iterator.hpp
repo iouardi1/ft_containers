@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/01 18:03:07 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/01 18:48:41 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ namespace ft
 	class random_access_iterator
 	{
 		private:
-			T*		data;
+			T	data;
 		public:
 			typedef typename std::ptrdiff_t						difference_type;
 			typedef T											value_type;
@@ -69,10 +69,72 @@ namespace ft
 		
 		public://constructors
 			random_access_iterator():data(nullptr){}
-			random_access_iterator(T* ptr):data(ptr){}
+			random_access_iterator(const random_access_iterator &copy): data(copy->data){}
+			random_access_iterator(pointer ptr):data(ptr){}
+		
+		public://assignement operator
+			random_access_iterator& operator=(const random_access_iterator& copy)
+			{
+				data = copy.data;
+				return *this;
+			}
 
-			
-			
+			reference	operator*() const { return *data; }
+			pointer		operator->() const { return data; }
+
+			//other operators
+			random_access_iterator&	operator++()//pre_increment
+			{
+				++data;
+				return *this;
+			}
+			random_access_iterator	operator++(int)//increment
+			{
+				random_access_iterator copy(*this);
+				++(*this);
+				return copy;
+			}
+			random_access_iterator&	operator--()//pre_decrement
+			{
+				--data;
+				return *this;
+			}
+			random_access_iterator	operator--(int)//decrement
+			{
+				random_access_iterator copy(*this);
+				--(*this);
+				return copy;
+			}
+			random_access_iterator	operator+(difference_type n) const
+			{
+				return random_access_iterator(data + n);
+			}
+			random_access_iterator&	operator+=(difference_type n)
+			{
+				data += n;
+				return *this;
+			}
+			random_access_iterator	operator-(difference_type n) const
+			{
+				return random_access_iterator(data - n);
+			}
+			random_access_iterator&	operator-=(difference_type n)
+			{
+				data -= n;
+				return *this;
+			}
+			reference	operator[](difference_type n) const
+			{
+				return *(*this + n);
+			}
+			bool	operator==(const random_access_iterator& copy) const
+			{
+				return (data == copy.data);
+			}
+			bool	operator!=(const random_access_iterator& copy) const
+			{
+				return (data != copy.data);
+			}
 			
 			
 	};

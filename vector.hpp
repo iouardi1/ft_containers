@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/01 18:04:03 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/01 18:11:07 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ namespace ft
 			typedef	typename allocator_type::const_reference					const_reference;
 			typedef	typename allocator_type::pointer							pointer;
 			typedef	typename allocator_type::const_pointer						const_pointer;
-			typedef	typename ft::random_access_iterator<pointer>			iterator;
-			typedef	typename ft::random_access_iterator<const_pointer>		const_iterator;
+			typedef	typename ft::random_access_iterator<pointer>				iterator;
+			typedef	typename ft::random_access_iterator<const_pointer>			const_iterator;
 			typedef	typename std::reverse_iterator<iterator>					reverse_iterator;
-			// typedef	typename std::reverse_iterator<const_iterator>				const_reverse_iterator;
+			typedef	typename std::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 		
 		public:
