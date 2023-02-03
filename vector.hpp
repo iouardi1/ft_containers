@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/01 18:11:07 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/04 00:00:13 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,12 @@ namespace ft
 			{
 				arr = this->alloc.allocate(n);
 				for (size_type i = 0; i < n; i++)
-					arr[i] = val;
+					this->alloc.construct(arr + i, val);
 			}
 		
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+			
+			vector (InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type last, const allocator_type& alloc = allocator_type())
 			{
 				size_type j = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -58,7 +59,10 @@ namespace ft
 				arr = this->alloc.allocate(j);
 				j = 0;
 				for (InputIterator i = first; i != last; i++)
-					arr[j++] = *i;
+				{
+					alloc.construct(arr + j, *i);
+					j++;
+				}
 			}
 
 			vector (const vector& x): size(x.size), capacity(x.capacity), alloc(x.alloc)
@@ -69,7 +73,7 @@ namespace ft
 			~vector()
 			{
 				if (arr)
-					alloc.deallocate(arr);
+					alloc.deallocate(arr, capacity);
 			}
 		
 		public:
@@ -91,7 +95,7 @@ namespace ft
 				alloc = x.alloc;
 				arr = alloc.allocate(capacity);
 				for (size_type i = 0; i < capacity; i++)
-					arr[i] = x[i];//to be seen l a t e r
+					alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
 				return (*this);
 			}
 			public:

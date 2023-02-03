@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/01 18:48:41 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/03 23:46:32 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ namespace ft
 		public:
 			typedef typename std::ptrdiff_t						difference_type;
 			typedef T											value_type;
-			typedef T*											pointer;
-			typedef T&											reference;
+			typedef typename ft::iterator_traits<T>::pointer	pointer;
+			typedef typename ft::iterator_traits<T>::reference	reference;
 			typedef typename std::random_access_iterator_tag	iterator_category;
 		
 		public://constructors
 			random_access_iterator():data(nullptr){}
-			random_access_iterator(const random_access_iterator &copy): data(copy->data){}
+			random_access_iterator(const random_access_iterator &copy): data(copy.data){}
 			random_access_iterator(pointer ptr):data(ptr){}
 		
 		public://assignement operator
@@ -135,8 +135,22 @@ namespace ft
 			{
 				return (data != copy.data);
 			}
-			
-			
+			bool	operator>(const random_access_iterator& copy) const
+			{
+				return (data > copy.data);
+			}
+			bool	operator>=(const random_access_iterator& copy) const
+			{
+				return (data >= copy.data);
+			}
+			bool	operator<(const random_access_iterator& copy) const
+			{
+				return (data < copy.data);
+			}
+			bool	operator<=(const random_access_iterator& copy) const
+			{
+				return (data <= copy.data);
+			}
 	};
 }
 

@@ -23,15 +23,15 @@ int main()
 
 ///
 
-    std::vector<int>::iterator  itr;
-    std::vector<int>::iterator  itr1;
-    std::vector<int> vec1(5, 6);
+    ft::vector<int>::iterator  itr;
+    ft::vector<int>::iterator  itr1;
+    ft::vector<int> vec1(5, 6);
 
-    itr = vec1.begin();
-    itr1 = vec1.begin();
+    // itr = vec1.begin();
+    // itr1 = vec1.begin();
     vec1[0] = 4;
 
-    // *itr++;
-    std::cout << *(itr++) << std::endl; //4
-    std::cout << *(itr1) << std::endl;
+    *itr++;
+    // std::cout << (*(itr++) > *itr) << std::endl; //4
+    // std::cout << *(itr1) << std::endl;
 }
