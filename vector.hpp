@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/04 19:22:56 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/04 22:38:20 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,10 @@ namespace ft
 				const_iterator	begin() const {return ft::random_access_iterator<const_pointer>(arr); }
 				iterator	end(){return ft::random_access_iterator<pointer>(arr + size); }
 				const_iterator	end() const {return ft::random_access_iterator<const_pointer>(arr + size); }
-				reverse_iterator	rbegin() {return ft::random_access_iterator<pointer>(arr + (size - 1)); }
+				reverse_iterator	rbegin()
+				{
+					return ft::reverse_iterator<iterator>(ft::random_access_iterator<pointer>(arr + (size - 1)));
+				}
 		private:
 			size_t		size;
 			size_t		capacity;

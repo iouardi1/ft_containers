@@ -78,25 +78,26 @@ int main()
 
 
     /*testing rbegin()*/
-    // ft::vector<int> vec(5, 45);
+    ft::vector<int> vec(5, 45);
 
-    // std::cout << *vec.rbegin() << std::endl << std::endl;
+    std::cout << *vec.rbegin() << std::endl << std::endl;
     
-    // std::vector<int> vec1(5, 45);
+    std::vector<int> vec1(5, 45);
 
-    // std::cout << *vec1.rbegin() << std::endl;
+    std::cout << *vec1.rbegin() << std::endl;
 
-    std::vector<int> myvector;
-  for (int i=0; i<10; i++) myvector.push_back(i);
+    // ft::vector<int> myvector(5, 9);
+  // for (int i=0; i<10; i++) myvector.push_back(i);
 
-  typedef std::vector<int>::iterator iter_type;
+  // typedef ft::vector<int>::iterator iter_type;
 
-  std::reverse_iterator<iter_type> rev_end (myvector.begin());
-  std::reverse_iterator<iter_type> rev_begin (myvector.end());
+  // ft::reverse_iterator<iter_type> rev_end (myvector.begin());
+  // ft::reverse_iterator<iter_type> rev_begin (myvector.end());
 
-  std::cout << "myvector:";
-  for (iter_type it = rev_end.base(); it != rev_begin.base(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  // std::cout << "myvector:";
+  // for (iter_type it = rev_end.base(); it != rev_begin.base(); ++it)
+  //   std::cout << ' ' << *it;
+  // std::cout << '\n';
+  // std::cout << *myvector.rbegin() << std::endl;
 
 }

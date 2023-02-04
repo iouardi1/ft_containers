@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/04 20:38:36 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/04 22:30:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,124 @@ namespace ft
 
 		//constructors
 		public:
-			reverse_iterator(): itr(), _current{}
+			reverse_iterator(): itr(), _current(){}
 			explicit reverse_iterator(iterator_type it): itr(it), _current(){}
 			template <class Iter>
 			reverse_iterator(const reverse_iterator<Iter>& rev_it): itr(rev_it.base()), _current(rev_it.base()) {}
 
 		//overloaded operators
 		public:
-			template <class Iter>
-			reverse_iterator& operator=(const reverse_iterator<Iter>& copy)
+			// template <class Iter>
+			reverse_iterator& operator=(const reverse_iterator<iterator_type>& copy)
 			{
 				itr = _current = copy.base();
 				return *this;
 			}
-			
+			reference	operator*() const 
+			{ 
+				Iterator tmp = _current;
+				return *--tmp; 
+			}
+			pointer	operator->() const
+			{
+				return &(operator*());
+			}
+			reverse_iterator&	operator++()
+			{
+				--_current;
+				return *this;
+			}
+			reverse_iterator	operator++(int)
+			{
+				reverse_iterator	tmp(*this);
+				
+				--_current;
+				return tmp;
+			}
+			reverse_iterator& operator--()
+			{
+				++_current;
+				return *this;
+			}
+			reverse_iterator  operator--(int)
+			{
+				reverse_iterator	tmp(*this);
+				++_current;
+				return	tmp;
+			}
+			reverse_iterator	operator+(difference_type n) const
+			{
+				return reverse_iterator(_current - n);
+			}
+			reverse_iterator&	operator+=(difference_type n)
+			{
+				_current -= n;
+				return *this;
+			}
+			reverse_iterator	operator-(difference_type n) const
+			{
+				return reverse_iterator(_current + n);
+			}
+			reverse_iterator&	operator-=(difference_type __n)
+			{
+				_current += __n;
+				return *this;
+			}
+			reference	operator[](difference_type n) const
+			{
+				return *(*this + n);
+			}
+
 		//member functions
 		public:
-			iterator_type	base() const { return ;}
+			iterator_type	base() const { return _current; }
 			
 		private:
 			iterator_type	itr;
-		protected::
+		protected:
 			iterator_type	_current;
 	};
+			//relational operators are a non member functions
+	template <class Iterator>
+	bool operator==(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() == rhs.base();
+	}
+	template <class Iterator>
+	bool operator!=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() != rhs.base();
+	}
+	template <class Iterator>
+	bool operator>(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() < rhs.base();
+	}
+	template <class Iterator>
+	bool operator>=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() <= rhs.base();
+	}
+	template <class Iterator>
+	bool operator<(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() > rhs.base();
+	}
+	template <class Iterator>
+	bool operator<=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	{
+		return lhs.base() >= rhs.base();
+	}
+	template <class Iterator>
+	reverse_iterator<Iterator>	operator+(typename ft::reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it)
+	{
+		return reverse_iterator<Iterator>(rev_it.base() - n);
+	}
+	template <class Iterator>
+	reverse_iterator<Iterator>	operator-(typename ft::reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it)
+	{
+		return reverse_iterator<Iterator>(rev_it.base() + n);
+	}
 };
 
 //random_access_iterator
