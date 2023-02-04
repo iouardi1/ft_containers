@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/03 23:46:32 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/04 20:38:36 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,50 @@ namespace ft
 		typedef typename std::ptrdiff_t						difference_type;
 		typedef  T											value_type;
 		typedef  const T*									pointer;
-		typedef  const T&									reference;
+		typedef  const T&									reference; 
 		typedef	typename std::random_access_iterator_tag	iterator_category;
 	};
 	
+};
+
+//reverse iterator
+namespace ft
+{
+	template <class Iterator> class reverse_iterator
+	{
+		public:
+			typedef Iterator													iterator_type;
+			typedef typename ft::iterator_traits<Iterator>::iterator_category	iterator_category;
+			typedef typename ft::iterator_traits<Iterator>::value_type			value_type;
+			typedef typename ft::iterator_traits<Iterator>::difference_type		difference_type;
+			typedef typename ft::iterator_traits<Iterator>::pointer				pointer;
+			typedef typename ft::iterator_traits<Iterator>::reference			reference;
+
+		//constructors
+		public:
+			reverse_iterator(): itr(), _current{}
+			explicit reverse_iterator(iterator_type it): itr(it), _current(){}
+			template <class Iter>
+			reverse_iterator(const reverse_iterator<Iter>& rev_it): itr(rev_it.base()), _current(rev_it.base()) {}
+
+		//overloaded operators
+		public:
+			template <class Iter>
+			reverse_iterator& operator=(const reverse_iterator<Iter>& copy)
+			{
+				itr = _current = copy.base();
+				return *this;
+			}
+			
+		//member functions
+		public:
+			iterator_type	base() const { return ;}
+			
+		private:
+			iterator_type	itr;
+		protected::
+			iterator_type	_current;
+	};
 };
 
 //random_access_iterator
@@ -152,7 +192,7 @@ namespace ft
 				return (data <= copy.data);
 			}
 	};
-}
+};
 
 
 #endif

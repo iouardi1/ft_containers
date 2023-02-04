@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/04 00:00:13 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/04 19:22:56 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ namespace ft
 			typedef	typename allocator_type::const_pointer						const_pointer;
 			typedef	typename ft::random_access_iterator<pointer>				iterator;
 			typedef	typename ft::random_access_iterator<const_pointer>			const_iterator;
-			typedef	typename std::reverse_iterator<iterator>					reverse_iterator;
-			typedef	typename std::reverse_iterator<const_iterator>				const_reverse_iterator;
+			typedef	typename ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 		
 		public:
@@ -99,7 +99,12 @@ namespace ft
 				return (*this);
 			}
 			public:
-			//iterator
+			//member functions
+				iterator	begin(){return ft::random_access_iterator<pointer>(arr); }
+				const_iterator	begin() const {return ft::random_access_iterator<const_pointer>(arr); }
+				iterator	end(){return ft::random_access_iterator<pointer>(arr + size); }
+				const_iterator	end() const {return ft::random_access_iterator<const_pointer>(arr + size); }
+				reverse_iterator	rbegin() {return ft::random_access_iterator<pointer>(arr + (size - 1)); }
 		private:
 			size_t		size;
 			size_t		capacity;
