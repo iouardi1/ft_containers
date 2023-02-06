@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/04 22:38:20 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/06 19:28:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft
 			typedef	typename allocator_type::const_pointer						const_pointer;
 			typedef	typename ft::random_access_iterator<pointer>				iterator;
 			typedef	typename ft::random_access_iterator<const_pointer>			const_iterator;
-			typedef	typename ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
 			typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 		
@@ -100,13 +100,41 @@ namespace ft
 			}
 			public:
 			//member functions
-				iterator	begin(){return ft::random_access_iterator<pointer>(arr); }
-				const_iterator	begin() const {return ft::random_access_iterator<const_pointer>(arr); }
-				iterator	end(){return ft::random_access_iterator<pointer>(arr + size); }
-				const_iterator	end() const {return ft::random_access_iterator<const_pointer>(arr + size); }
+				iterator	begin()
+				{
+					return iterator(arr);
+				}
+				const_iterator	begin() const 
+				{
+					return const_iterator(arr);
+				}
+				iterator	end()
+				{
+					return iterator(arr + size); 
+				}
+				const_iterator	end() const 
+				{
+					return const_iterator(arr + size); 
+				}
 				reverse_iterator	rbegin()
 				{
-					return ft::reverse_iterator<iterator>(ft::random_access_iterator<pointer>(arr + (size - 1)));
+					return reverse_iterator(this->end());
+				}
+				const_reverse_iterator	rbegin() const
+				{
+					return const_reverse_iterator(this->end());
+				}
+				reverse_iterator	rend()
+				{
+					return reverse_iterator(this->begin());
+				}
+				const_reverse_iterator	rend() const
+				{
+					return const_reverse_iterator(this->begin());
+				}
+				const_iterator	cbegin() const
+				{
+					return arr;
 				}
 		private:
 			size_t		size;

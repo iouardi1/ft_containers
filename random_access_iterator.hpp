@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/04 22:30:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/06 18:29:22 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,19 @@ namespace ft
 		//constructors
 		public:
 			reverse_iterator(): itr(), _current(){}
-			explicit reverse_iterator(iterator_type it): itr(it), _current(){}
+			explicit reverse_iterator(iterator_type it): itr(it), _current(it){}
 			template <class Iter>
 			reverse_iterator(const reverse_iterator<Iter>& rev_it): itr(rev_it.base()), _current(rev_it.base()) {}
 
 		//overloaded operators
 		public:
-			// template <class Iter>
 			reverse_iterator& operator=(const reverse_iterator<iterator_type>& copy)
 			{
 				itr = _current = copy.base();
 				return *this;
 			}
 			reference	operator*() const 
-			{ 
+			{
 				Iterator tmp = _current;
 				return *--tmp; 
 			}
