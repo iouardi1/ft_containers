@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/06 19:28:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/07 00:40:22 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ namespace ft
 
 		
 		public:
-		//for constructors
-			explicit vector (const allocator_type& alloc = allocator_type()): size(0), capacity(0), arr(NULL), alloc(alloc)
+		///for constructors
+			explicit vector (const allocator_type& alloc = allocator_type()): _size(0), _capacity(0), arr(NULL), alloc(alloc)
 			{}
 	
-			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()): size(n), capacity(n), alloc(alloc)
+			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()): _size(n), _capacity(n), alloc(alloc)
 			{
 				arr = this->alloc.allocate(n);
 				for (size_type i = 0; i < n; i++)
@@ -53,8 +53,8 @@ namespace ft
 				size_type j = 0;
 				for (InputIterator i = first; i != last; i++)
 					j++;
-				size = j;
-				capacity = j;
+				_size = j;
+				_capacity = j;
 				this->alloc = alloc;
 				arr = this->alloc.allocate(j);
 				j = 0;
@@ -65,7 +65,7 @@ namespace ft
 				}
 			}
 
-			vector (const vector& x): size(x.size), capacity(x.capacity), alloc(x.alloc)
+			vector (const vector& x): _size(x._size), _capacity(x._capacity), alloc(x.alloc)
 			{
 				*this = vector(x.begin(), x.end());
 			}
@@ -73,11 +73,19 @@ namespace ft
 			~vector()
 			{
 				if (arr)
-					alloc.deallocate(arr, capacity);
+					alloc.deallocate(arr, _capacity);
 			}
-		
 		public:
-		//overloaded operators
+			///exceptions
+			class out_of_range : public std::exception
+			{
+				const char* what() const throw()
+				{
+					return "out_of_range";
+				}
+			};
+		public:
+		///overloaded operators
 			const_reference operator[] (size_type n) const
 			{
 				return (arr[n]);
@@ -88,18 +96,44 @@ namespace ft
 				return (arr[n]);
 			}
 			
+			reference at (size_type n)
+			{
+				if (n <= _size)
+					return (operator[](n));
+				else
+					throw out_of_range();
+			}
+
+			const_reference at (size_type n) const
+			{
+				if (n <= _size)
+					return (operator[](n));
+				else
+					throw out_of_range();
+			}
+			
+			reference	front()
+			{
+				return *(this->begin());
+			}
+
+			const_reference front() const
+			{
+				return *(this->begin());
+			}
+			
 			vector& operator= (const vector& x)
 			{
-				size = x.size;
-				capacity = x.capacity;
+				_size = x._size;
+				_capacity = x._capacity;
 				alloc = x.alloc;
-				arr = alloc.allocate(capacity);
-				for (size_type i = 0; i < capacity; i++)
+				arr = alloc.allocate(_capacity);
+				for (size_type i = 0; i < _capacity; i++)
 					alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
 				return (*this);
 			}
 			public:
-			//member functions
+			///member functions
 				iterator	begin()
 				{
 					return iterator(arr);
@@ -110,11 +144,11 @@ namespace ft
 				}
 				iterator	end()
 				{
-					return iterator(arr + size); 
+					return iterator(arr + _size); 
 				}
 				const_iterator	end() const 
 				{
-					return const_iterator(arr + size); 
+					return const_iterator(arr + _size); 
 				}
 				reverse_iterator	rbegin()
 				{
@@ -132,13 +166,62 @@ namespace ft
 				{
 					return const_reverse_iterator(this->begin());
 				}
-				const_iterator	cbegin() const
+			public:
+				///capacity
+				size_type	size() const
 				{
-					return arr;
+					return (this->_size);
 				}
+				size_type	max_size() const
+				{
+					return (this->_capacity);
+				}
+				void	resize(size_type n, value_type val = value_type())
+				{
+					if (n < _capacity)
+					{
+						this->alloc.destroy(this->arr + n);
+						this->_size = n;
+					}
+					else
+					{
+						this->alloc.allocate(n - _capacity);
+						for (size_type i = _capacity; i < n; i++)
+							this->alloc.construct(arr + _capacity, val);
+						this->_size = n;
+						if (n > _capacity * 2)
+							this->_capacity = n;
+						else
+							this->_capacity *= 2;
+					}
+				}
+				size_type	capacity() const
+				{
+					return this->_capacity;
+				}
+				bool	empty() const
+				{
+					return (!_size);
+				}
+				void	reserve(size_type n)
+				{
+					if (n > _capacity)
+					{	
+						this->alloc.allocate(n - _capacity);
+						for (size_type i = _capacity; i < n; i++)
+							this->alloc.construct(arr + _capacity);
+						if (n > _capacity * 2)
+							this->_capacity = n;
+						else
+							this->_capacity *= 2;
+					}
+				}
+				
+				
+				
 		private:
-			size_t		size;
-			size_t		capacity;
+			size_t		_size;
+			size_t		_capacity;
 			Alloc		alloc;
 			value_type	*arr;
 
