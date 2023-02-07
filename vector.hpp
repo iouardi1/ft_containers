@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/07 00:40:22 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/07 16:28:17 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,16 @@ namespace ft
 				return *(this->begin());
 			}
 			
+			reference	back()
+			{
+				return *(this->end());
+			}
+	
+			const_reference	back() const
+			{
+				return *(this->end());
+			}
+			
 			vector& operator= (const vector& x)
 			{
 				_size = x._size;
@@ -132,90 +142,134 @@ namespace ft
 					alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
 				return (*this);
 			}
-			public:
-			///member functions
-				iterator	begin()
+		public:
+		///member functions
+			iterator	begin()
+			{
+				return iterator(arr);
+			}
+
+			const_iterator	begin() const 
+			{
+				return const_iterator(arr);
+			}
+
+			iterator	end()
+			{
+				return iterator(arr + _size); 
+			}
+
+			const_iterator	end() const 
+			{
+				return const_iterator(arr + _size); 
+			}
+
+			reverse_iterator	rbegin()
+			{
+				return reverse_iterator(this->end());
+			}
+
+			const_reverse_iterator	rbegin() const
+			{
+				return const_reverse_iterator(this->end());
+			}
+
+			reverse_iterator	rend()
+			{
+				return reverse_iterator(this->begin());
+			}
+
+			const_reverse_iterator	rend() const
+			{
+				return const_reverse_iterator(this->begin());
+			}
+
+		public:
+			///capacity
+			size_type	size() const
+			{
+				return (this->_size);
+			}
+
+			size_type	max_size() const
+			{
+				return (this->_capacity);
+			}
+
+			void	resize(size_type n, value_type val = value_type())
+			{
+				if (n < _capacity)
 				{
-					return iterator(arr);
+					this->alloc.destroy(this->arr + n);
+					this->_size = n;
 				}
-				const_iterator	begin() const 
+				else
 				{
-					return const_iterator(arr);
-				}
-				iterator	end()
-				{
-					return iterator(arr + _size); 
-				}
-				const_iterator	end() const 
-				{
-					return const_iterator(arr + _size); 
-				}
-				reverse_iterator	rbegin()
-				{
-					return reverse_iterator(this->end());
-				}
-				const_reverse_iterator	rbegin() const
-				{
-					return const_reverse_iterator(this->end());
-				}
-				reverse_iterator	rend()
-				{
-					return reverse_iterator(this->begin());
-				}
-				const_reverse_iterator	rend() const
-				{
-					return const_reverse_iterator(this->begin());
-				}
-			public:
-				///capacity
-				size_type	size() const
-				{
-					return (this->_size);
-				}
-				size_type	max_size() const
-				{
-					return (this->_capacity);
-				}
-				void	resize(size_type n, value_type val = value_type())
-				{
-					if (n < _capacity)
-					{
-						this->alloc.destroy(this->arr + n);
-						this->_size = n;
-					}
+					this->alloc.allocate(n - _capacity);
+					for (size_type i = _capacity; i < n; i++)
+						this->alloc.construct(arr + _capacity, val);
+					this->_size = n;
+					if (n > _capacity * 2)
+						this->_capacity = n;
 					else
-					{
-						this->alloc.allocate(n - _capacity);
-						for (size_type i = _capacity; i < n; i++)
-							this->alloc.construct(arr + _capacity, val);
-						this->_size = n;
-						if (n > _capacity * 2)
-							this->_capacity = n;
-						else
-							this->_capacity *= 2;
-					}
+						this->_capacity *= 2;
 				}
-				size_type	capacity() const
-				{
-					return this->_capacity;
+			}
+
+			size_type	capacity() const
+			{
+				return this->_capacity;
+			}
+
+			bool	empty() const
+			{
+				return (!_size);
+			}
+
+			void	reserve(size_type n)
+			{
+				if (n > _capacity)
+				{	
+					this->alloc.allocate(n - _capacity);
+					for (size_type i = _capacity; i < n; i++)
+						this->alloc.construct(arr + _capacity);
+					if (n > _capacity * 2)
+						this->_capacity = n;
+					else
+						this->_capacity *= 2;
 				}
-				bool	empty() const
-				{
-					return (!_size);
-				}
-				void	reserve(size_type n)
-				{
-					if (n > _capacity)
-					{	
-						this->alloc.allocate(n - _capacity);
-						for (size_type i = _capacity; i < n; i++)
-							this->alloc.construct(arr + _capacity);
-						if (n > _capacity * 2)
-							this->_capacity = n;
-						else
-							this->_capacity *= 2;
-					}
-				}
+			}
+		public:
+		///modifiers
+			void	assign(iterator first, iterator last)
+			{
+				size_type	j = 0;
+				for (iterator i = first; i != last; i++)
+					j++;
+				arr = alloc.allocate(j);
+				j = 0;
+				for (iterator i = first; i != last; i++)
+					arr[j++] = *i;
+				_size = j;
+				_capacity = j;
+			}
+			void	assign(size_type n, const value_type& val)
+			{
+				_size = n;
+				_capacity = n;
+				arr = alloc.allocate(n);
+				for (size_type i = 0; i < _size; i++)
+					arr[i] = val;
+			}
+			void	push_back(const value_type& val)
+			{
+				_capacity += 1;
+				_size += 1;
+				arr = alloc.allocate(_capacity);
+				arr[_capacity - 1] = val;
+			}
+			
+				
 				
 				
 				

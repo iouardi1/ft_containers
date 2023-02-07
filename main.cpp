@@ -204,17 +204,63 @@ int main()
 	// std::cout << '\n';
 	//* ************************************************* *//
 
-	// * testing front * //
-	std::vector<int> myvector(3);
+	// * testing front and back* //
+	// ft::vector<int> myvector(3);
 
-	myvector[0] = 16;
-	myvector[1] = 72;
-
-	// now front equals 78, and back 16
+	// myvector[0] = 16;
+	// myvector[1] = 72;
 
 	// std::cout << "myvector.front() is now " << myvector.front() << '\n';
-	// myvector.front() -= myvector.back();
+	// std::cout << "myvector.back() is now " << myvector.back() << '\n';
+	// /// std 
+	// std::vector<int> myvector1(3);
+	// myvector1[0] = 16;
+	// myvector1[1] = 72;
 
-	std::cout << "myvector.front() is now " << myvector.front() << '\n';
+	// std::cout << "myvector1.front() is now " << myvector1.front() << '\n';
+	// std::cout << "myvector1.back() is now " << myvector1.back() << '\n';
+	//* ************************************************* *//
 
+	// * testing asssign * //
+	// std::vector<int> first;
+	// std::vector<int> second;
+	// std::vector<int> third;
+
+	// first.assign (7,100);             // 7 ints with a value of 100
+
+	// std::vector<int>::iterator it;
+	// it=first.begin()+1;
+
+	// second.assign (it,first.end()-1); // the 5 central values of first
+
+	// int myints[] = {1776,7,4};
+	// third.assign (myints,myints+3);   // assigning from array.
+
+	// std::cout << "Size of first: " << int (first.size()) << "  " << *first.begin()<< '\n';
+	// std::cout << "Size of second: " << int (second.size()) << "  " << *second.begin() << '\n';
+	// std::cout << "Size of third: " << int (third.size()) << "  " << *third.begin() << '\n';
+	// std::cout << "\n" ;
+	// ///-----ft
+	// ft::vector<int> first1;
+	// ft::vector<int> second1;
+	// ft::vector<int> third1;
+
+	// first1.assign (7,100);             // 7 ints with a value of 100
+
+	// ft::vector<int>::iterator it1;
+	// it1 = first1.begin()+1;
+
+	// second1.assign (it1,first1.end()-1); // the 5 central values of first1
+
+	// int myints1[] = {1776,7,4};
+	// third1.assign (myints1,myints1+3);   // assigning from array.
+
+	// std::cout << "Size of first1: " << int (first1.size()) << "  " << *first1.begin()<< '\n';
+	// std::cout << "Size of second1: " << int (second1.size()) << "  " << *second1.begin() << '\n';
+	// std::cout << "Size of third1: " << int (third1.size()) << "  " << *third1.begin() << '\n';
+
+	//* ************************************************* *//
 }
+	// * testing push_back * //
+
+	//* ************************************************* *//
