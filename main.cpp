@@ -288,15 +288,20 @@ int main()
 
 	//* ************************************************* *//
 	// * testing push_back * //
-	ft::vector<int> myvector;
-	int myint;
+	// ft::vector<int> myvector;
+	// int myint;
 
 
-	myvector.push_back(10);
+	// std::cout << "Please enter some integers (enter 0 to end):\n";
+
+	// do {
+	// 	std::cin >> myint;
+	// 	myvector.push_back (myint);
+	// } while (myint);
 
 	// std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
 	// std::cout << "myvector stores " << int(myvector.capacity()) << " numbers.\n\n";
-	/// std
+	// /// std
 	// std::vector<int> myvector1;
 	// int myint1;
 
@@ -309,6 +314,40 @@ int main()
 
 	// std::cout << "myvector1 stores " << int(myvector1.size()) << " numbers.\n";
 	// std::cout << "myvector1 stores " << int(myvector1.capacity()) << " numbers.\n";
+
+	//* ************************************************* *//
+	// * testing pop_back * //
+	// ft::vector<int> myvector;
+	// int sum (0);
+	// myvector.push_back (100);
+	// myvector.push_back (200);
+	// myvector.push_back (300);
+
+	// while (!myvector.empty())
+	// {
+	// 	sum+=myvector.back();
+	// 	std::cout << "elements: " << myvector.back() << std::endl;
+	// 	myvector.pop_back();
+	// }
+
+	// std::cout << "The elements of myvector add up to " << sum << "\n\n";
+	// ///std
+	// std::vector<int> myvector1;
+	// int sum1 (0);
+	// myvector1.push_back (100);
+	// myvector1.push_back (200);
+	// myvector1.push_back (300);
+
+	// while (!myvector1.empty())
+	// {
+	// 	std::cout << "elements: " << myvector1.back() << std::endl;
+	// 	sum1+=myvector1.back();
+	// 	myvector1.pop_back();
+	// }
+
+	// std::cout << "The elements of myvector1 add up to " << sum1 << '\n';
+	//* ************************************************* *//
+	// * testing insert * //
 
 	//* ************************************************* *//
 }

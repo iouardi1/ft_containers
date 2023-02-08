@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/08 13:47:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/08 16:37:35 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +124,12 @@ namespace ft
 			
 			reference	back()
 			{
-				return *(this->end());
+				return *(this->end() - 1);
 			}
 	
 			const_reference	back() const
 			{
-				return *(this->end());
+				return *(this->end() - 1);
 			}
 			
 			vector& operator= (const vector& x)
@@ -231,13 +231,11 @@ namespace ft
 				if (n > _capacity)
 				{	
 					value_type	*tmp = this->alloc.allocate(n);
-					for (size_type i = 0; i < n; i++)
+					for (size_type i = 0; i < _size; i++)
 					{
-						std::cout << "IWAAA ACH HADAA" << std::endl;
-						tmp[i] = arr[i];/// hmmmmm :3
-					}
-					for (size_type i = 0; i < _capacity; i++)
+						this->alloc.construct(tmp + i, arr[i]); /// hmmmmm :3
 						this->alloc.destroy(arr + i);
+					}
 					alloc.deallocate(arr, _capacity);
 					arr = tmp;
 					this->_capacity = n;
@@ -286,8 +284,36 @@ namespace ft
 				this->alloc.construct(arr + (_size++) , val);
 			}
 			
-				
-				
+			void pop_back()
+			{
+				if (_size > 0)
+				{
+					_size -= 1;
+					this->alloc.destroy(arr + _size);
+				}
+			}
+			
+			iterator insert (iterator position, const value_type& val)
+			{
+				size_type j(0);
+				for (iterator i = begin(); i != position; i++)
+					j++;
+				if (_size == _capacity)
+				{
+					size_type	i;
+
+					if (_size == 0)
+						i = 1;
+					else
+						i = _capacity * 2;
+					reserve(i);
+				}
+				for (size_type l = _size; l > j; --l)
+				{
+					this->alloc.construct(arr + l, val);
+					
+				}
+			}
 				
 				
 		private:
