@@ -180,6 +180,33 @@ int main()
   	// }
 	//* ************************************************* *//
 
+	// * testing reserve * //
+	// ft::vector<int> vec(10);
+
+	// std::cout << vec.capacity() << '\n';
+	// std::cout << vec.size() << '\n';
+	// vec.reserve(30);
+	// std::cout << vec.capacity() << '\n';
+	// std::cout << vec.size() << '\n';
+	// vec.reserve(5);
+	// std::cout << vec.capacity() << '\n';
+	// std::cout << vec.size() << '\n';
+	
+	// ///std
+	// std::cout << "\n";
+	// std::vector<int> vec1(10);
+	
+	// std::cout << vec1.capacity() << '\n';
+	// std::cout << vec1.size() << '\n';
+	// vec1.reserve(30);
+	// std::cout << vec1.capacity() << '\n';
+	// std::cout << vec1.size() << '\n';
+	// vec1.reserve(5);
+	// std::cout << vec1.capacity() << '\n';
+	// std::cout << vec1.size() << '\n';
+
+	//* ************************************************* *//
+
 	// * testing at * //
 	// ft::vector<int> myvector (10);   // 10 zero-initialized ints
 
@@ -260,7 +287,28 @@ int main()
 	// std::cout << "Size of third1: " << int (third1.size()) << "  " << *third1.begin() << '\n';
 
 	//* ************************************************* *//
-}
 	// * testing push_back * //
+	ft::vector<int> myvector;
+	int myint;
+
+
+	myvector.push_back(10);
+
+	// std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
+	// std::cout << "myvector stores " << int(myvector.capacity()) << " numbers.\n\n";
+	/// std
+	// std::vector<int> myvector1;
+	// int myint1;
+
+	// std::cout << "Please enter some integers (enter 0 to end):\n";
+
+	// do {
+	// 	std::cin >> myint1;
+	// 	myvector1.push_back (myint1);
+	// } while (myint1);
+
+	// std::cout << "myvector1 stores " << int(myvector1.size()) << " numbers.\n";
+	// std::cout << "myvector1 stores " << int(myvector1.capacity()) << " numbers.\n";
 
 	//* ************************************************* *//
+}

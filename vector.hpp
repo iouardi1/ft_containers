@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/07 16:28:17 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/08 13:47:52 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ namespace ft
 
 		
 		public:
-		///for constructors
+			///for constructors
 			explicit vector (const allocator_type& alloc = allocator_type()): _size(0), _capacity(0), arr(NULL), alloc(alloc)
 			{}
 	
@@ -47,7 +47,6 @@ namespace ft
 			}
 		
 			template <class InputIterator>
-			
 			vector (InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type last, const allocator_type& alloc = allocator_type())
 			{
 				size_type j = 0;
@@ -75,6 +74,7 @@ namespace ft
 				if (arr)
 					alloc.deallocate(arr, _capacity);
 			}
+
 		public:
 			///exceptions
 			class out_of_range : public std::exception
@@ -85,7 +85,7 @@ namespace ft
 				}
 			};
 		public:
-		///overloaded operators
+			///overloaded operators
 			const_reference operator[] (size_type n) const
 			{
 				return (arr[n]);
@@ -143,7 +143,7 @@ namespace ft
 				return (*this);
 			}
 		public:
-		///member functions
+			///member functions
 			iterator	begin()
 			{
 				return iterator(arr);
@@ -230,43 +230,60 @@ namespace ft
 			{
 				if (n > _capacity)
 				{	
-					this->alloc.allocate(n - _capacity);
-					for (size_type i = _capacity; i < n; i++)
-						this->alloc.construct(arr + _capacity);
-					if (n > _capacity * 2)
-						this->_capacity = n;
-					else
-						this->_capacity *= 2;
+					value_type	*tmp = this->alloc.allocate(n);
+					for (size_type i = 0; i < n; i++)
+					{
+						std::cout << "IWAAA ACH HADAA" << std::endl;
+						tmp[i] = arr[i];/// hmmmmm :3
+					}
+					for (size_type i = 0; i < _capacity; i++)
+						this->alloc.destroy(arr + i);
+					alloc.deallocate(arr, _capacity);
+					arr = tmp;
+					this->_capacity = n;
 				}
 			}
+
 		public:
-		///modifiers
-			void	assign(iterator first, iterator last)
+			///modifiers
+			template <class InputIterator>
+			void	assign(InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type last)
 			{
 				size_type	j = 0;
-				for (iterator i = first; i != last; i++)
+				for (InputIterator i = first; i != last; i++)
 					j++;
-				arr = alloc.allocate(j);
+				if (j > _capacity)
+					reserve(j);
 				j = 0;
-				for (iterator i = first; i != last; i++)
-					arr[j++] = *i;
+				for (InputIterator i = first; i != last; i++)
+				{
+					this->alloc.construct(arr + j, *i);
+					j++;
+				}
 				_size = j;
-				_capacity = j;
 			}
+
 			void	assign(size_type n, const value_type& val)
 			{
+				if (n > _capacity)
+					reserve(n);
+				for (size_type i = 0; i < n; i++)
+					this->alloc.construct(arr + i, val);
 				_size = n;
-				_capacity = n;
-				arr = alloc.allocate(n);
-				for (size_type i = 0; i < _size; i++)
-					arr[i] = val;
 			}
+
 			void	push_back(const value_type& val)
 			{
-				_capacity += 1;
-				_size += 1;
-				arr = alloc.allocate(_capacity);
-				arr[_capacity - 1] = val;
+				if (_size == _capacity)
+				{
+					size_type i;
+					if (_capacity == 0)
+						i = 1;
+					else
+						i = _capacity * 2;
+					reserve(i);
+				}
+				this->alloc.construct(arr + (_size++) , val);
 			}
 			
 				
@@ -274,10 +291,10 @@ namespace ft
 				
 				
 		private:
-			size_t		_size;
-			size_t		_capacity;
-			Alloc		alloc;
-			value_type	*arr;
+			size_type		_size;
+			size_type		_capacity;
+			Alloc			alloc;
+			value_type		*arr;
 
 
 	};
