@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/08 16:37:35 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:50:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,27 +292,18 @@ namespace ft
 					this->alloc.destroy(arr + _size);
 				}
 			}
-			
+
 			iterator insert (iterator position, const value_type& val)
 			{
 				size_type j(0);
 				for (iterator i = begin(); i != position; i++)
 					j++;
 				if (_size == _capacity)
-				{
-					size_type	i;
-
-					if (_size == 0)
-						i = 1;
-					else
-						i = _capacity * 2;
-					reserve(i);
-				}
+					resize(j, val);
 				for (size_type l = _size; l > j; --l)
-				{
-					this->alloc.construct(arr + l, val);
-					
-				}
+					this->alloc.construct(arr + l, arr + l - 1);
+				this->alloc.construct(arr + l, val);
+				++_size;
 			}
 				
 				
