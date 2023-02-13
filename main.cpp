@@ -348,6 +348,25 @@ int main()
 	// std::cout << "The elements of myvector1 add up to " << sum1 << '\n';
 	//* ************************************************* *//
 	// * testing insert * //
+	ft::vector<int> myvector (3,100);
+	ft::vector<int>::iterator it;
+
+	it = myvector.begin();
+	// *++it;
+	it = myvector.insert ( it , 200 );
+	for (ft::vector<int>::iterator it = myvector.begin(); it != myvector.end(); *++it)
+		std::cout << *it << '\n';
+	/// std 
+	// std::vector<int> myvector1 (3,100);
+	// std::vector<int>::iterator it1;
+
+	// it1 = myvector1.begin();
+	// // *++it;
+	// it1 = myvector1.insert ( it1 , 200 );
+	// for (std::vector<int>::iterator it1 = myvector1.begin(); it1 != myvector1.end(); *++it1)
+	// 	std::cout << *it1 << '\n';
+
+
 
 	//* ************************************************* *//
 }
