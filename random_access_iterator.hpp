@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/06 21:24:38 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/14 19:02:37 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,16 @@ namespace ft
 		//constructors
 		
 		public:
-			reverse_iterator(): itr(), _current(){}
-			explicit reverse_iterator(iterator_type it): itr(it), _current(it){}
+			reverse_iterator(): _current(){}
+			explicit reverse_iterator(iterator_type it): _current(it){}
 			template <class Iter>
-			reverse_iterator(const reverse_iterator<Iter>& rev_it): itr(rev_it.base()), _current(rev_it.base()) {}
+			reverse_iterator(const reverse_iterator<Iter>& rev_it): _current(rev_it.base()) {}
 
 		//overloaded operators
 		public:
 			reverse_iterator& operator=(const reverse_iterator<iterator_type>& copy)
 			{
-				itr = _current = copy.base();
+				_current = copy.base();
 				return *this;
 			}
 			reference	operator*() const 
@@ -138,9 +138,7 @@ namespace ft
 		//member functions
 		public:
 			iterator_type	base() const { return _current; }
-			
-		private:
-			iterator_type	itr;
+
 		protected:
 			iterator_type	_current;
 	};
@@ -185,6 +183,7 @@ namespace ft
 	{
 		return reverse_iterator<Iterator>(rev_it.base() + n);
 	}
+	
 };
 
 //random_access_iterator
@@ -205,7 +204,12 @@ namespace ft
 		public://constructors
 			random_access_iterator():data(nullptr){}
 			random_access_iterator(const random_access_iterator &copy): data(copy.data){}
+			template<typename RA>
+			random_access_iterator(const random_access_iterator<RA> &copy): data(copy.data){}
 			random_access_iterator(pointer ptr):data(ptr){}
+		
+		public:
+			T	base() const { return data; }
 		
 		public://assignement operator
 			random_access_iterator& operator=(const random_access_iterator& copy)
@@ -240,10 +244,10 @@ namespace ft
 				--(*this);
 				return copy;
 			}
-			random_access_iterator	operator+(difference_type n) const
-			{
-				return random_access_iterator(data + n);
-			}
+			
+			// template<typename DF>
+			// friend	random_access_iterator<DF>	operator+(difference_type n);
+			
 			random_access_iterator&	operator+=(difference_type n)
 			{
 				data += n;
@@ -262,6 +266,21 @@ namespace ft
 			{
 				return *(*this + n);
 			}
+
+			random_access_iterator& operator+(const random_access_iterator& other) const
+			{
+				return (*this + other);
+			}
+			random_access_iterator& operator-(const random_access_iterator& other) const
+			{
+				return (*this - other);
+			}
+			
+			random_access_iterator& operator+(difference_type n) const
+			{
+				return (random_access_iterator(data + n));
+			}
+			
 			bool	operator==(const random_access_iterator& copy) const
 			{
 				return (data == copy.data);
@@ -286,7 +305,27 @@ namespace ft
 			{
 				return (data <= copy.data);
 			}
+			
 	};
+	
+	template <class Iterator>
+	random_access_iterator<Iterator>	operator+(typename ft::random_access_iterator<Iterator>::difference_type n, const random_access_iterator<Iterator>& rev_it)
+	{
+		return random_access_iterator<Iterator>(rev_it.base() + n);
+	}
+	
+	template <class Iterator>
+	random_access_iterator<Iterator>	operator+(const random_access_iterator<Iterator>& rev_it, typename ft::random_access_iterator<Iterator>::difference_type n)
+	{
+		return random_access_iterator<Iterator>(rev_it.base() + n);
+	}
+	
+	template <class Iterator>
+	typename ft::random_access_iterator<Iterator>::difference_type	operator-(const random_access_iterator<Iterator>& itr1, const random_access_iterator<Iterator>& itr2)
+	{
+		return random_access_iterator<Iterator>(itr1.base() - itr2.base());
+	}
+	
 };
 
 

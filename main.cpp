@@ -347,26 +347,109 @@ int main()
 
 	// std::cout << "The elements of myvector1 add up to " << sum1 << '\n';
 	//* ************************************************* *//
-	// * testing insert * //
-	ft::vector<int> myvector (3,100);
-	ft::vector<int>::iterator it;
+	// * testing insert iterator position, const value_type& val)* //
+	// ft::vector<int> myvector (3,100);
+	// ft::vector<int>::iterator it;
 
-	it = myvector.begin();
+	// it = myvector.begin();
 	// *++it;
-	it = myvector.insert ( it , 200 );
-	for (ft::vector<int>::iterator it = myvector.begin(); it != myvector.end(); *++it)
-		std::cout << *it << '\n';
+	// it = myvector.insert ( it , 200 );
+	// for (ft::vector<int>::iterator it = myvector.begin(); it != myvector.end(); *++it)
+	// 	std::cout << *it << "\n";
+	// std::cout << "\n";
+	// /// std 
+	// std::vector<int> myvector1 (3,100);
+	// std::vector<int>::iterator it1;
+
+	// it1 = myvector1.begin();
+	// *++it1;
+	// it1 = myvector1.insert ( it1 , 200 );
+	// for (std::vector<int>::iterator it1 = myvector1.begin(); it1 != myvector1.end(); *++it1)
+	// 	std::cout << *it1 << '\n';
+	//* ************************************************* *//
+	// * testing insert (iterator position, size_type	n, const value_type& val)
+	// ft::vector<int> myvector (3,100);
+	// ft::vector<int>::iterator it;
+
+	// it = myvector.begin();
+
+	// myvector.insert (++it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+	// /// std 
+	// std::vector<int> myvector1 (3,100);
+	// std::vector<int>::iterator it1;
+
+	// it1 = myvector1.begin();
+
+	// myvector1.insert (++it1,2,300);
+
+	// // "it1" no longer valid, get a new one:
+	// it1 = myvector1.begin();
+
+	// for (it1=myvector1.begin(); it1<myvector1.end(); it1++)
+	// 	std::cout << ' ' << *it1;
+	// std::cout << '\n';
+	//* ************************************************* *//
+	// * testing insert (iterator position, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type first, InputIterator last) *//
+	// ft::vector<int> myvector (5,100);
+	// ft::vector<int>::iterator it;
+
+	// it = myvector.begin();
+	// it+=2;
+	// myvector.insert ( it , 200 );
+
+	// myvector.insert (it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// ft::vector<int> anothervector (2,400);
+	// myvector.insert ((it + 2), anothervector.begin(), anothervector.end());
+
+	// int myarray [] = { 501,502,503 };
+	// myvector.insert (myvector.begin(), myarray, (myarray+3));
+
+	// std::cout << "myvector contains:";
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
 	/// std 
 	// std::vector<int> myvector1 (3,100);
 	// std::vector<int>::iterator it1;
 
 	// it1 = myvector1.begin();
-	// // *++it;
 	// it1 = myvector1.insert ( it1 , 200 );
-	// for (std::vector<int>::iterator it1 = myvector1.begin(); it1 != myvector1.end(); *++it1)
-	// 	std::cout << *it1 << '\n';
 
+	// myvector1.insert (it1,2,300);
 
+	// // "it1" no longer valid, get a new one:
+	// it1 = myvector1.begin();
 
+	// std::vector<int> anothervector1 (2,400);
+	// myvector1.insert (it1+2,anothervector1.begin(),anothervector1.end());
+
+	// int myarray1 [] = { 501,502,503 };
+	// myvector1.insert (myvector1.begin(), myarray1, myarray1+3);
+
+	// std::cout << "myvector1 contains:";
+	// for (it1=myvector1.begin(); it1<myvector1.end(); it1++)
+	// 	std::cout << ' ' << *it1;
+	// std::cout << '\n';
 	//* ************************************************* *//
+    //* testing iterators *//
+
+    ft::vector<int> myvector(10, 7);
+   ft::vector<int>::iterator myiterator(myvector.begin());
+//    ft::vector<int>::iterator myiterator1(myvector.begin() + 2);
+
+    std::cout << &(*(1 +  myiterator));
 }
+
+
+

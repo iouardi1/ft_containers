@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/13 16:05:40 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/14 17:12:45 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft
 			typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
 			typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
-		
+		 
 		public:
 			///for constructors
 			explicit vector (const allocator_type& alloc = allocator_type()): _size(0), _capacity(0), arr(NULL), alloc(alloc)
@@ -205,14 +205,13 @@ namespace ft
 				}
 				else
 				{
-					this->alloc.allocate(n - _capacity);
-					for (size_type i = _capacity; i < n; i++)
-						this->alloc.construct(arr + _capacity, val);
-					this->_size = n;
 					if (n > _capacity * 2)
-						this->_capacity = n;
+						reserve(n);
 					else
-						this->_capacity *= 2;
+						reserve(_capacity * 2);
+					for (size_type i = _size; i < n; i++)
+						this->alloc.construct(this->arr + i, val);
+					this->_size = n;
 				}
 			}
 
@@ -245,7 +244,7 @@ namespace ft
 		public:
 			///modifiers
 			template <class InputIterator>
-			void	assign(InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type last)
+			void	assign(InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last)
 			{
 				size_type	j = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -283,7 +282,7 @@ namespace ft
 				}
 				this->alloc.construct(arr + (_size++) , val);
 			}
-			
+
 			void pop_back()
 			{
 				if (_size > 0)
@@ -295,22 +294,78 @@ namespace ft
 
 			iterator insert (iterator position, const value_type& val)
 			{
-				size_type j(0);
+				size_type	j(0);
 				for (iterator i = begin(); i != position; i++)
 					j++;
+				if (j > _size)
+					throw out_of_range();
+				size_type	newSize = _size + 1;
+				std::cout << "j === " << j << std::endl;
+				std::cout << "newSize === " << newSize << std::endl;
 				if (_size == _capacity)
-					resize(j, val);
-				for (size_type l = _size; l > j; --l)
-					this->alloc.construct(arr + l, arr[l - 1]);
-				this->alloc.construct(arr + j, val);
-				++_size;
-				return iterator(arr + j);
+					resize(newSize);
+				iterator	l;
+				for (l = end(); l != position; l--)
+				{
+				std::cout << "newSize === " << _capacity << std::endl;
+					newSize--;
+					this->alloc.construct(arr + _size, *(l - 1));
+				}
+				this->alloc.construct(arr + newSize, val);
+				return l;
 			}
+
+			
+			void	insert(iterator position, size_type	n, const value_type& val)
+			{
+				size_type	j(0);
+				for (iterator i = begin(); i != position; i++)
+					j++;
+				if (j > _size)
+					throw out_of_range();
+				size_type	newSize = _size + n;
+				if (newSize > _capacity)
+					resize(newSize);
+				iterator	l;
+				for (l = end(); l != (position + n - 1); l--)
+				{
+					this->alloc.construct(arr + newSize, *(l - n));
+					newSize--;
+				}
+				for (iterator i = position + n - 1; i != position - 1; i--)
+				{
 				
-			// void	insert(iterator position, size_type	n, const value_type& val)
-			// {
-				
-			// }
+					this->alloc.construct(arr + newSize, val);
+					newSize--;
+				}
+			}
+
+			template <class InputIterator>
+			void insert (iterator position, InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last)
+			{
+				size_type	j(0);
+				for (iterator i = begin(); i != position; i++)
+					j++;
+				if (j > _size)
+					throw out_of_range();
+				size_type	n(0);
+				for (InputIterator i = first; i != last; i++)
+					n++;
+				size_type	newSize = _size + n;
+				if (newSize > _capacity)
+					resize(newSize);
+				for (iterator i = end(); i != last; i++)
+				{
+					this->alloc.construct(arr + newSize, *(i - n));
+					newSize--;
+				}
+				for (iterator i = last; i != first; --i)
+				{
+					this->alloc.construct(arr + newSize, *i);
+					newSize--;
+				}
+			}
+
 			
 		private:
 			size_type		_size;
