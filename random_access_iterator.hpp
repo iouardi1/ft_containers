@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 17:31:47 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 19:54:37 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ namespace ft
 		
 		public://constructors
 			random_access_iterator():data(nullptr){}
-			random_access_iterator(const random_access_iterator &copy): data(copy.data){}
-			template<typename RA>
-			random_access_iterator(const random_access_iterator<RA> &copy): data(copy.data){}
+			random_access_iterator(const random_access_iterator &copy): data(copy.base()){}
+			// template<typename RA>
+			// random_access_iterator(const random_access_iterator<RA> &copy): data(copy.data){}
 			random_access_iterator(pointer ptr):data(ptr){}
 		
 		public:
@@ -139,7 +139,7 @@ namespace ft
 				return (*this - other);
 			}
 			
-			random_access_iterator& operator+(difference_type n) const
+			random_access_iterator operator+(difference_type n) const
 			{
 				return (random_access_iterator(data + n));
 			}
@@ -208,7 +208,7 @@ namespace ft
 			template <class itr1, class itr2>
 			friend difference_type	operator-(random_access_iterator<itr1> const it1, random_access_iterator<itr2> const it2)
 			{
-				return (it1.data - it2.data);
+				return (it1.base() - it2.base());
 			}
 	};
 	

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 17:29:03 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 17:38:02 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 18:30:13 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define REVERSE_ITERATOR_HPP
 
 #include <iostream>
+#include "random_access_iterator.hpp"
 
 namespace ft
 {

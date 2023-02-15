@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 17:29:27 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 19:50:49 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
 			}
 		
 			template <class InputIterator>
-			vector (InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, T>::type last, const allocator_type& alloc = allocator_type())
+			vector (InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc = allocator_type())
 			{
 				size_type j = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -133,18 +133,31 @@ namespace ft
 				return *(this->end() - 1);
 			}
 			
-			vector& operator= (const vector& x)
+			vector& operator= (const vector& x) const
 			{
-				_size = x._size;
-				_capacity = x._capacity;
-				alloc = x.alloc;
-				arr = alloc.allocate(_capacity);
-				for (size_type i = 0; i < _capacity; i++)
-					alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
+				if (this != &x)
+				{
+					clear();
+					alloc.deallocate(arr, _capacity);
+					_size = x._size;
+					_capacity = x._capacity;
+					alloc = x.alloc;
+					arr = alloc.allocate(_capacity);
+					for (size_type i = 0; i < _capacity; i++)
+						alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
+				}
 				return (*this);
 			}
+	
 		public:
 			///member functions
+			void	clear()
+			{
+				for (size_type	i = 0; i < _size; i++)
+					alloc.destroy(arr + i);
+				_size = 0;
+			}
+			
 			iterator	begin()
 			{
 				return iterator(arr);
@@ -405,6 +418,12 @@ namespace ft
 					newSize--;
 				}
 			}
+			
+			//* getters *//
+			Alloc	get_allocator()
+			{
+				return (this->alloc);
+			}
 
 			
 		private:
@@ -415,6 +434,57 @@ namespace ft
 
 
 	};
+	//* overloaded non member functions operators
+	template <class T>
+	bool	operator==(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		if (vec1.size() != vec2.size())
+			return	false;
+		for (size_t i = 0; i < vec1.size(); i++)
+		{
+			if (vec1[i] != vec2[i])
+				return	false;
+		}
+		return true;
+	}
+	
+	template <class T>
+	bool	operator!=(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		return !(vec1 == vec2);
+	}
+
+	template <class T>
+	bool	operator<(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		size_t	minSize = vec1.size() < vec2.size() ? vec1.size() : vec2.size();
+		for (size_t i = 0; i < minSize; i++)// recheck  later ++i
+		{
+			if (vec1[i] < vec2[i])
+				return true;
+			else if (vec1[i] > vec2[i])
+				return false;
+		}
+		return (vec1.size() < vec2.size());
+	}
+
+	template <class T>
+	bool	operator<=(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		return !(vec2 < vec1);
+	}
+
+	template <class T>
+	bool	operator>(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		return (vec2 < vec1);
+	}
+
+	template <class T>
+	bool	operator>=(const vector<T>& vec1, const vector<T>& vec2)
+	{
+		return !(vec2 > vec1);
+	}
 }
 
 #endif
