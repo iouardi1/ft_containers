@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 17:29:03 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 18:30:13 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 21:36:31 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,13 @@ namespace ft
 				_current -= n;
 				return *this;
 			}
-			reverse_iterator&	operator-(difference_type n) const
+
+			reverse_iterator	operator-(difference_type n) const
 			{
 				return reverse_iterator(_current + n);
 			}
             //* deffierence operator  *//
-			difference_type operator-(const reverse_iterator it) const
+			difference_type operator-(const reverse_iterator& it) const///--
 			{
 				return (it._current - _current);
 			}

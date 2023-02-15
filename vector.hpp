@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 19:50:49 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 21:42:07 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ namespace ft
 				j = 0;
 				for (InputIterator i = first; i != last; i++)
 				{
-					alloc.construct(arr + j, *i);
+					THIS->alloc.construct(arr + j, *i);
 					j++;
 				}
 			}
@@ -138,10 +138,10 @@ namespace ft
 				if (this != &x)
 				{
 					clear();
-					alloc.deallocate(arr, _capacity);
 					_size = x._size;
 					_capacity = x._capacity;
 					alloc = x.alloc;
+					this->alloc.deallocate(arr, _capacity);
 					arr = alloc.allocate(_capacity);
 					for (size_type i = 0; i < _capacity; i++)
 						alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r

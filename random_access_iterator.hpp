@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/15 19:54:37 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 21:21:12 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ namespace ft
 		public://constructors
 			random_access_iterator():data(nullptr){}
 			random_access_iterator(const random_access_iterator &copy): data(copy.base()){}
-			// template<typename RA>
-			// random_access_iterator(const random_access_iterator<RA> &copy): data(copy.data){}
+			template<typename RA>
+			random_access_iterator(const random_access_iterator<RA> &copy): data(copy.base()){}
 			random_access_iterator(pointer ptr):data(ptr){}
 		
 		public:
@@ -144,16 +144,21 @@ namespace ft
 				return (random_access_iterator(data + n));
 			}
 			
-			template <class itr1, class itr2>
-			friend	bool	operator==(const itr1& it1, const itr2& it2)
+			// bool	operator==(const random_access_iterator<EQ>& it1, const random_access_iterator<EQ>& it2)
+			// {
+			// 	return (it1.base() == it2.base());
+			// }
+
+			template <typename EQ>
+			bool operator==(const random_access_iterator<EQ>& other)
 			{
-				return (it1.data == it2.data);
+				return (this->data == other.data);
 			}
 
 			template <class itr1, class itr2>
 			friend bool	operator!=(const itr1& it1, const itr2& it2)
 			{
-				return (it1.data != it2.data);
+				return (*it1.data != *it2.data);
 			}
 
 			template <class itr1, class itr2>
