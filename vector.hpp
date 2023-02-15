@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/14 17:12:45 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/15 17:29:27 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <memory>
 #include <vector>
 #include "random_access_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {	
