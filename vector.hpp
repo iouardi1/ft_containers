@@ -198,21 +198,48 @@ namespace ft
 
 			void	resize(size_type n, value_type val = value_type())
 			{
-				if (n < _capacity)
+				// if (n < _capacity)
+				// {
+				// 	this->alloc.destroy(this->arr + n);
+				// 	this->_size = n;
+				// }
+				// else
+				// {
+				// 	if (n > _capacity * 2)
+				// 		reserve(n);
+				// 	else
+				// 		reserve(_capacity * 2);
+				// 	for (size_type i = _size; i < n; i++)
+				// 		this->alloc.construct(this->arr + i, val);
+				// 	this->_size = n;
+				// }
+
+
+				if (n == _capacity)
+					return ;
+				else if (n < _capacity)
 				{
-					this->alloc.destroy(this->arr + n);
-					this->_size = n;
+					for (size_type i = _size; i < n; i++)
+						this->alloc.construt(arr + i, val);
+					_size = n;
 				}
 				else
 				{
-					if (n > _capacity * 2)
-						reserve(n);
-					else
-						reserve(_capacity * 2);
-					for (size_type i = _size; i < n; i++)
-						this->alloc.construct(this->arr + i, val);
-					this->_size = n;
+					value_type *tmp = alloc.allocate(n);
+					for (size_type i = 0; i < n; i++){
+						if (i < _size)
+							alloc.construct(tmp + i, arr[i]);					
+						else
+							alloc.construct(tmp + i, val);
+					}
+					for (size_type i = 0; i < _size; i++)
+						alloc.destroy(arr + i);
+					alloc.deallocate(arr, _capacity);
+					_size = n;
+					_capacity = n;
+					arr = tmp;
 				}
+
 			}
 
 			size_type	capacity() const
@@ -227,18 +254,30 @@ namespace ft
 
 			void	reserve(size_type n)
 			{
-				if (n > _capacity)
-				{	
-					value_type	*tmp = this->alloc.allocate(n);
-					for (size_type i = 0; i < _size; i++)
-					{
-						this->alloc.construct(tmp + i, arr[i]); /// hmmmmm :3
-						this->alloc.destroy(arr + i);
-					}
-					alloc.deallocate(arr, _capacity);
-					arr = tmp;
-					this->_capacity = n;
+				// if (n > _capacity)
+				// {	
+				// 	value_type	*tmp = this->alloc.allocate(n);
+				// 	for (size_type i = 0; i < _size; i++)
+				// 	{
+				// 		this->alloc.construct(tmp + i, arr[i]); /// hmmmmm :3
+				// 		this->alloc.destroy(arr + i);
+				// 	}
+				// 	alloc.deallocate(arr, _capacity);
+				// 	arr = tmp;
+				// 	this->_capacity = n;
+				// }
+
+				if (n <= _capacity)
+					return ;
+				value_type	*tmp = alloc.allocate(n);
+				for (size_type i = 0; i < _size; i++){
+					alloc.construct(tmp + i, arr[i]);
+					alloc.destroy(arr + i);
 				}
+				if (_capacity)
+					alloc.deallocate(arr, _capacity);
+				arr = tmp;
+				_capacity = n;
 			}
 
 		public:
