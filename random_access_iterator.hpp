@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/18 17:57:18 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/18 18:17:26 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ namespace ft
 		public://assignement operator
 			random_access_iterator& operator=(const random_access_iterator& copy)
 			{
-				data = copy.data;
+				data = copy.base();
 				return *this;
 			}
 
@@ -148,15 +148,16 @@ namespace ft
 				return (random_access_iterator(data + n));
 			}
 			
-			template <typename EQ>
-			friend bool	operator==(const random_access_iterator<EQ>& it1, const random_access_iterator<EQ>& it2)
-			{
-				return (it1.base() == it2.base());
-			}
+			// template <typename EQ>
+			// friend bool	operator==(const random_access_iterator<EQ>& it1, const random_access_iterator<EQ>& it2)
+			// {
+			// 	return (it1.base() == it2.base());
+			// }
 
 			bool operator==(const random_access_iterator& other) const
 			{
-				return (this->data == other.data);
+				std::cout << "WESH DKHTI?" << (this->data == other.data) << std::endl;
+				return (data == other.base());
 			}
 			
 			// template <class itr1, class itr2>
