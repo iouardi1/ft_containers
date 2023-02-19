@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/19 01:18:09 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/19 14:22:39 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,45 +327,90 @@ namespace ft
 
 			iterator insert(iterator position, const value_type& val)
 			{
-				size_type	newSize = _size + 1;
-				if (empty())
-					reserve(1);
-				if (newSize > _capacity)
-					reserve(_capacity * 2);
-				iterator	l;
-				for (l = end(); l != position; l--)
+				//* il fallait juste de separer les cas, _size > _capacity: in this case we should construct, otherwise
+				//* il fallait juste de les deplacer :3
+				
+				size_type	pos_index = position - begin();
+				if (_size == _capacity)
 				{
-					newSize--;
-					this->alloc.construct(arr + newSize, *(l - 1));
+					size_type	new_capacity = (_capacity == 0) ?  1 : _capacity * 2;
+					T	*tmp = this->alloc.allocate(new_capacity);
+					for (size_type i = 0; i < pos_index; i++)
+					{
+						this->alloc.construct(tmp + i, arr[i]);
+						this->alloc.destroy(arr + i);
+					}
+					alloc.construct(tmp + pos_index, val);
+					for (size_type i = pos_index; i < _size; ++i)
+					{
+						this->alloc.construct(tmp + (i + 1), arr[i]);
+						this->alloc.destroy(arr + i);
+					}
+					this->alloc.deallocate(arr , _capacity);
+					arr = tmp;
+					_capacity = new_capacity;
 				}
-				this->alloc.construct(arr + newSize - 1, val);
+				else
+				{
+					this->alloc.construct(arr + _size, arr[_size - 1]);
+					for (size_type i = _size - 1; i > pos_index; --i)
+						arr[i] = arr[i - 1];
+					arr[pos_index] = val;
+				}
 				_size += 1;
-				return l;
+				return (begin() + pos_index);
 			}
 
 			
 			void	insert(iterator position, size_type	n, const value_type& val)
 			{
-				size_type	j(0);
-				for (iterator i = begin(); i != position; i++)
-					j++;
-				if (j > _size)
-					throw out_of_range();
-				size_type	newSize = _size + n;
-				if (newSize > _capacity)
-					resize(newSize);
-				iterator	l;
-				for (l = end(); l != (position + n - 1); l--)
+				std::cout << "hmmmm" << std::endl;
+				size_type	pos_index = position - begin();
+				if (n == 0)
+					return ;
+				if (_size + n > _capacity)
 				{
-					this->alloc.construct(arr + newSize, *(l - n));
-					newSize--;
+					size_type	newCapacity = (2 * _capacity) > (_size + n) ? 2 * _capacity : _size + n;
+					T			*new_arr = this->alloc.allocate(newCapacity);
+					
+					for (size_type	i = 0; i < pos_index; i++)
+					{
+						alloc.construct(new_arr + i, arr[i]);
+						alloc.destroy(arr + i);
+					}
+					for (size_type	i = 0; i < n; i++)
+						alloc.construct(new_arr + pos_index + i, val);
+					for (size_type	i = pos_index; i < _size; i++)
+					{
+						alloc.construct(new_arr + n + i, arr[i]);
+						alloc.destroy(arr + i);
+					}
+					alloc.deallocate(arr, _capacity);
+					arr = new_arr;
+					_capacity = newCapacity;
 				}
-				for (iterator i = position + n - 1; i != position - 1; i--)
+				else
 				{
+					for (size_type	i = _size + n - 1; i >= pos_index + n; i--)
+						arr[i] = arr[i - n];
+					for (size_type	i = 0; i < n; i++)
+						alloc.construct(arr + pos_index + i, val);
+					_size += n;
+				}
+				// if (newSize > _capacity)
+				// 	resize(newSize);
+				// iterator	l;
+				// for (l = end(); l != (position + n - 1); l--)
+				// {
+				// 	this->alloc.construct(arr + newSize, *(l - n));
+				// 	newSize--;
+				// }
+				// for (iterator i = position + n - 1; i != position - 1; i--)
+				// {
 				
-					this->alloc.construct(arr + newSize, val);
-					newSize--;
-				}
+				// 	this->alloc.construct(arr + newSize, val);
+				// 	newSize--;
+				// }
 			}
 
 			template <class InputIterator>
