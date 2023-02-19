@@ -444,11 +444,15 @@ int main()
 	//* ************************************************* *//
     //* testing iterators *//
 
-    ft::vector<int> myvector(10, 7);
-   ft::vector<int>::iterator myiterator(myvector.begin());
-//    ft::vector<int>::iterator myiterator1(myvector.begin() + 2);
+//     ft::vector<int> myvector(10, 7);
+//    ft::vector<int>::iterator myiterator(myvector.begin());
+//    myvector[1] = 181;
+// //    ft::vector<int>::iterator myiterator1(myvector.begin() + 2);
 
-    std::cout << &(*(1 +  myiterator));
+// 	for (; myiterator +1!= myvector.end(); myiterator++)
+//     std::cout << *(myiterator +1) << std::endl;
+
+	 ft::vector<std::string> ft_v2;
 }
 
 

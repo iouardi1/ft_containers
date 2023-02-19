@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/18 17:33:47 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/19 01:18:09 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,23 @@ namespace ft
 				}
 			}
 
-			vector (const vector& x): _size(x._size), _capacity(x._capacity), alloc(x.alloc)
+			vector (const vector& x)
 			{
-				*this = vector(x.begin(), x.end());
+				_size = 0;
+				_capacity = 0;
+				this->alloc = allocator_type();
+				this->arr = nullptr;
+				*this = x;
 			}
 			
 			~vector()
 			{
 				if (arr)
+				{
+					for (size_t	i = 0; i < _size; i++)
+						alloc.destroy(arr + i);
 					alloc.deallocate(arr, _capacity);
+				}
 			}
 
 		public:
@@ -99,18 +107,18 @@ namespace ft
 			
 			reference at (size_type n)
 			{
-				if (n <= _size)
+				if (n < _size)
 					return (operator[](n));
 				else
-					throw out_of_range();
+					throw std::out_of_range("vector");
 			}
 
 			const_reference at (size_type n) const
 			{
-				if (n <= _size)
+				if (n < _size)
 					return (operator[](n));
 				else
-					throw out_of_range();
+					throw std::out_of_range("vector");
 			}
 			
 			reference	front()
@@ -138,13 +146,13 @@ namespace ft
 				if (this != &x)
 				{
 					clear();
-					_size = x._size;
-					_capacity = x._capacity;
 					alloc = x.alloc;
-					std::cout <<  arr  << std::endl;
-					this->alloc.deallocate(arr, _capacity);
+					// if (_capacity > 0)
+					// 	this->alloc.deallocate(arr, _capacity);
+					_capacity = x._capacity;
 					arr = this->alloc.allocate(_capacity);
-					for (size_type i = 0; i < _capacity; i++)
+					_size = x._size;
+					for (size_type i = 0; i < _size; i++)
 						this->alloc.construct(arr + i, x.arr[i]);//to be seen l a t e r
 				}
 				return (*this);
@@ -154,7 +162,7 @@ namespace ft
 			///member functions
 			void	clear()
 			{
-				for (size_type	i = 0; i < _size; ++i)
+				for (size_type	i = 0; i < _size; i++)
 					alloc.destroy(arr + i);
 				_size = 0;
 			}
@@ -164,7 +172,7 @@ namespace ft
 				return iterator(arr);
 			}
 
-			const_iterator	begin() const 
+			const_iterator	begin() const
 			{
 				return const_iterator(arr);
 			}
@@ -208,28 +216,11 @@ namespace ft
 
 			size_type	max_size() const
 			{
-				return (this->_capacity);
+				return (this->alloc.max_size());
 			}
 
 			void	resize(size_type n, value_type val = value_type())
 			{
-				// if (n < _capacity)
-				// {
-				// 	this->alloc.destroy(this->arr + n);
-				// 	this->_size = n;
-				// }
-				// else
-				// {
-				// 	if (n > _capacity * 2)
-				// 		reserve(n);
-				// 	else
-				// 		reserve(_capacity * 2);
-				// 	for (size_type i = _size; i < n; i++)
-				// 		this->alloc.construct(this->arr + i, val);
-				// 	this->_size = n;
-				// }
-
-
 				if (n == _capacity)
 					return ;
 				else if (n < _capacity)
@@ -241,7 +232,8 @@ namespace ft
 				else
 				{
 					value_type *tmp = alloc.allocate(n);
-					for (size_type i = 0; i < n; i++){
+					for (size_type i = 0; i < n; i++)
+					{
 						if (i < _size)
 							alloc.construct(tmp + i, arr[i]);					
 						else
@@ -254,7 +246,6 @@ namespace ft
 					_capacity = n;
 					arr = tmp;
 				}
-
 			}
 
 			size_type	capacity() const
@@ -269,19 +260,6 @@ namespace ft
 
 			void	reserve(size_type n)
 			{
-				// if (n > _capacity)
-				// {	
-				// 	value_type	*tmp = this->alloc.allocate(n);
-				// 	for (size_type i = 0; i < _size; i++)
-				// 	{
-				// 		this->alloc.construct(tmp + i, arr[i]); /// hmmmmm :3
-				// 		this->alloc.destroy(arr + i);
-				// 	}
-				// 	alloc.deallocate(arr, _capacity);
-				// 	arr = tmp;
-				// 	this->_capacity = n;
-				// }
-
 				if (n <= _capacity)
 					return ;
 				value_type	*tmp = alloc.allocate(n);
@@ -347,26 +325,21 @@ namespace ft
 				}
 			}
 
-			iterator insert (iterator position, const value_type& val)
+			iterator insert(iterator position, const value_type& val)
 			{
-				size_type	j(0);
-				for (iterator i = begin(); i != position; i++)
-					j++;
-				if (j > _size)
-					throw out_of_range();
 				size_type	newSize = _size + 1;
-				std::cout << "j === " << j << std::endl;
-				std::cout << "newSize === " << newSize << std::endl;
-				if (_size == _capacity)
-					resize(newSize);
+				if (empty())
+					reserve(1);
+				if (newSize > _capacity)
+					reserve(_capacity * 2);
 				iterator	l;
 				for (l = end(); l != position; l--)
 				{
-				std::cout << "newSize === " << _capacity << std::endl;
 					newSize--;
-					this->alloc.construct(arr + _size, *(l - 1));
+					this->alloc.construct(arr + newSize, *(l - 1));
 				}
-				this->alloc.construct(arr + newSize, val);
+				this->alloc.construct(arr + newSize - 1, val);
+				_size += 1;
 				return l;
 			}
 
