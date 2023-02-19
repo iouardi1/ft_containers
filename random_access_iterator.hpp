@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/18 23:26:39 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/19 19:16:39 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ namespace ft
 			random_access_iterator	operator++(int)//increment
 			{
 				random_access_iterator copy(*this);
+				// std::cout << "is this leaking?" <<  std::endl;
 				++(*this);
 				return copy;
 			}
