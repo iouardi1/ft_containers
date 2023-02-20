@@ -6,13 +6,14 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:28:13 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/19 19:16:39 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/20 01:02:10 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RANDOM_ACCESS_ITERATOR
 #define RANDOM_ACCESS_ITERATOR
 #include <iostream>
+#include "tools.hpp"
 
 
 //iterator_traits
@@ -100,7 +101,6 @@ namespace ft
 			random_access_iterator	operator++(int)//increment
 			{
 				random_access_iterator copy(*this);
-				// std::cout << "is this leaking?" <<  std::endl;
 				++(*this);
 				return copy;
 			}
@@ -140,14 +140,6 @@ namespace ft
 				return *(*this + n);
 			}
 
-			// random_access_iterator	operator+(difference_type n) const
-			// {
-			// 	return (*this + other);
-			// }
-			// random_access_iterator& operator-(const random_access_iterator& other) const
-			// {
-			// 	return (*this - other);
-			// }
 			difference_type operator-(const random_access_iterator& other) const
 			{
 				return (this->data - other.data);
@@ -168,12 +160,6 @@ namespace ft
 			{
 				return (data == other.base());
 			}
-			
-			// template <class itr1, class itr2>
-			// friend bool operator==(const itr1& it1, const itr2& it2)
-			// {
-			// 	return (it1.data == it2.data);
-			// }
 
 			template <class itr1, class itr2>
 			friend bool	operator!=(const itr1& it1, const itr2& it2)

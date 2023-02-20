@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:05:01 by iouardi           #+#    #+#             */
-/*   Updated: 2023/02/19 20:41:54 by iouardi          ###   ########.fr       */
+/*   Updated: 2023/02/20 01:04:33 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace ft
 		public:
 			typedef	T															value_type;
 			typedef	size_t														size_type;
-			typedef	std::allocator<T>											allocator_type;
+			typedef	Alloc														allocator_type;
 			typedef	typename allocator_type::reference							reference;
 			typedef	typename allocator_type::const_reference					const_reference;
 			typedef	typename allocator_type::pointer							pointer;
@@ -49,7 +49,7 @@ namespace ft
 			}
 		
 			template <class InputIterator>
-			vector (InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc = allocator_type())
+			vector (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc = allocator_type())
 			{
 				size_type j = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -70,7 +70,6 @@ namespace ft
 			{
 				_size = 0;
 				_capacity = 0;
-				// this->alloc = allocator_type();
 				this->arr = nullptr;
 				*this = x;
 			}
@@ -86,15 +85,6 @@ namespace ft
 				}
 			}
 
-		public:
-			///exceptions
-			class out_of_range : public std::exception
-			{
-				const char* what() const throw()
-				{
-					return "out_of_range";
-				}
-			};
 		public:
 			///overloaded operators
 			const_reference operator[] (size_type n) const
@@ -242,30 +232,6 @@ namespace ft
 					while (n !=  _size)
 						insert (this->end(), n - _size, val);
 				}
-				// if (n < _capacity)
-				// {
-				// 	for (size_type i = _size; i < n; i++)
-				// 		this->alloc.construct(arr + i, val);
-				// 	_size = n;
-				// }
-				// else
-				// {
-				// 	value_type *tmp = alloc.allocate(n);
-				// 	for (size_type i = 0; i < n; i++)
-				// 	{
-				// 		if (i < _size)
-				// 			alloc.construct(tmp + i, arr[i]);					
-				// 		else
-				// 			alloc.construct(tmp + i, val);
-				// 	}
-				// 	for (size_type i = 0; i < _size; i++)
-				// 		alloc.destroy(arr + i);
-				// 	if (_capacity)
-				// 		alloc.deallocate(arr, _capacity);
-				// 	_size = n;
-				// 	_capacity = n;
-				// 	arr = tmp;
-				// }
 			}
 
 			size_type	capacity() const
@@ -297,7 +263,7 @@ namespace ft
 		public:
 			///modifiers
 			template <class InputIterator>
-			void	assign(InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last)
+			void	assign(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last)
 			{
 				size_type	j = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -419,7 +385,7 @@ namespace ft
 			}
 
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type last)
+			void insert (iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last)
 			{
 				size_type	n = 0;
 				for (InputIterator i = first; i != last; i++)
@@ -428,24 +394,42 @@ namespace ft
 					return ;
 				if (_size + n > _capacity)
 				{
-					size_type	newCapacity = (2 * _capacity) > (_size + n) ? 2 * _capacity : _size + n;
-					T			*new_arr = this->alloc.allocate(newCapacity);
+					size_type	i;
+					T			*new_arr;
+					size_type	newCapacity;
+					try {
+						newCapacity = (2 * _capacity) > (_size + n) ? 2 * _capacity : _size + n;
+						new_arr = this->alloc.allocate(newCapacity);
 
-					T			*oldPos = arr;
-					T			*newPos = new_arr;
+						size_type	pos_index = position - begin();
 
-					while (oldPos != position.base())
-						this->alloc.construct(newPos++, *oldPos++);
-
-					while (first != last)
-						this->alloc.construct(newPos++, *first++);
-
-					while (oldPos != arr + _size)
-						this->alloc.construct(newPos++, *oldPos++);
-
-					this->alloc.deallocate(arr, _capacity);
-					arr = new_arr;
-					_capacity = newCapacity;
+						for (i = 0; i < pos_index; i++)
+						{
+							alloc.construct(new_arr + i, arr[i]);
+							alloc.destroy(arr + i);
+						}
+						// size_type	pos_index_tmp = pos_index;
+						while (first != last)
+						{
+							this->alloc.construct(new_arr + i++, *first++);
+						}
+						
+						for (; i < _size + n; i++)
+						{
+							this->alloc.construct(new_arr + i, arr[pos_index]);
+							this->alloc.destroy(arr + pos_index);
+							pos_index++;
+						}
+						if (_capacity)
+							this->alloc.deallocate(arr, _capacity);
+						arr = new_arr;
+						_capacity = newCapacity;
+					}
+					catch(...){
+						while (--i)
+							alloc.destroy(new_arr + i);
+						alloc.deallocate(new_arr, newCapacity);
+					}
 				}
 				else
 				{
@@ -466,7 +450,7 @@ namespace ft
 			iterator erase(iterator position)
 			{
 				if (position >= end() || position < begin())
-					throw out_of_range();
+					throw std::out_of_range("vector");
 				T	*pos = position.base();
 
 				this->alloc.destroy(pos);
@@ -483,7 +467,7 @@ namespace ft
 			iterator erase (iterator first, iterator last)
 			{
 				if (first >= last || first >= end() || last > end() || first < begin() || last < begin())
-					throw out_of_range();
+					throw std::out_of_range("vector");
 				
 				T	*start = first.base();
 				T	*end = last.base();
@@ -527,7 +511,7 @@ namespace ft
 			}
 
 			template <class T1, class Alloc1>
-			friend	void swap (vector<T1,Alloc1>& x, vector<T1,Alloc1>& y);
+			friend	void swap (vector <T1, Alloc1>& x, vector <T1, Alloc1>& y);
 			
 			//* getters *//
 			Alloc	get_allocator()
@@ -538,7 +522,6 @@ namespace ft
 		private:
 			size_type		_size;
 			size_type		_capacity;
-			// Alloc			alloc;
 			allocator_type	alloc;
 			value_type		*arr;
 

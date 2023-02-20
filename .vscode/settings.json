@@ -67,7 +67,12 @@
         "deque": "cpp",
         "map": "cpp",
         "set": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "stack": "cpp"
     },
     "better-comments.tags": [
 
